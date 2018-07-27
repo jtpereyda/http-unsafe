@@ -121,6 +121,7 @@ static int zv_http_process_content_length(zv_http_request_t *r, zv_http_out_t *o
     (void) len;
     if (r->method == ZV_HTTP_POST)
     {
+        log_info("Content-Length header in POST command! Reading body...\n");
         int content_len;
         sscanf(data, "%d", &content_len);
         char* body = (char*) malloc(content_len*sizeof(char));
