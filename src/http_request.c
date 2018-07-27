@@ -19,11 +19,13 @@
 static int zv_http_process_ignore(zv_http_request_t *r, zv_http_out_t *out, char *data, int len);
 static int zv_http_process_connection(zv_http_request_t *r, zv_http_out_t *out, char *data, int len);
 static int zv_http_process_if_modified_since(zv_http_request_t *r, zv_http_out_t *out, char *data, int len);
+static int zv_http_process_content_length(zv_http_request_t *r, zv_http_out_t *out, char *data, int len);
 
 zv_http_header_handle_t zv_http_headers_in[] = {
     {"Host", zv_http_process_ignore},
     {"Connection", zv_http_process_connection},
     {"If-Modified-Since", zv_http_process_if_modified_since},
+    {"Content-Length", zv_http_process_content_length},
     {"", zv_http_process_ignore}
 };
 
@@ -111,6 +113,21 @@ static int zv_http_process_connection(zv_http_request_t *r, zv_http_out_t *out, 
         out->keep_alive = 1;
     }
 
+    return ZV_OK;
+}
+
+static int zv_http_process_content_length(zv_http_request_t *r, zv_http_out_t *out, char *data, int len) {
+    (void) out;
+    (void) len;
+    if (r->method == ZV_HTTP_POST)
+    {
+        int content_len;
+        sscanf(data, "%d", &content_len);
+        char* body = (char*) malloc(content_len*sizeof(char));
+        // Definitely need to copy that...
+        strcpy(body, r->buf); /* flag */
+        // TODO: Do something with the request body
+    }
     return ZV_OK;
 }
 
