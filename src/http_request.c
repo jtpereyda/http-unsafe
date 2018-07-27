@@ -67,6 +67,8 @@ void zv_http_handle_header(zv_http_request_t *r, zv_http_out_t *o) {
     zv_http_header_handle_t *header_in;
     int len;
 
+    log_info("Handling headers...\n");
+
     list_for_each(pos, &(r->list)) {
         hd = list_entry(pos, zv_http_header_t, list);
         /* handle */
