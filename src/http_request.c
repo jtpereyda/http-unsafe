@@ -123,12 +123,13 @@ static int zv_http_process_content_length(zv_http_request_t *r, zv_http_out_t *o
     (void) len;
     if (r->method == ZV_HTTP_POST)
     {
-        log_info("Content-Length header in POST command! Reading body...\n");
         int content_len;
         sscanf(data, "%d", &content_len);
+        log_info("Content-Length header in POST command! Reading body (length %d)...\n", content_len);
         char* body = (char*) malloc(content_len*sizeof(char));
         // Definitely need to copy that...
-        strcpy(body, r->buf); /* flag */
+        strcpy(body, &r->buf[r->pos]); /* flag */
+        log_info("Body: %s\n", body);
         // TODO: Do something with the request body
     }
     return ZV_OK;
